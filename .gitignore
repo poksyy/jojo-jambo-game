@@ -1,0 +1,11 @@
+/project-2d/Library
+/project-2d/Temp
+/project-2d/UserSettings
+/project-2d/Logs
+
+**/.vs/
+
+/project-2d/Build/
+
+/project-2d/obj/
+/project-2d/.vscode/
