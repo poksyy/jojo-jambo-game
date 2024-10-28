@@ -2,20 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class BulletScript : MonoBehaviour
 {
     public float Speed;
-
     private Rigidbody2D Rigidbody2D;
-    // Start is called before the first frame update
+    private Vector2 Direction;
+
     void Start()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void FixedUpdate()
     {
-        Rigidbody2D.velocity = Vector2.right;
+        Rigidbody2D.velocity = Direction * Speed;
+    }
+
+    public void SetDirection(Vector2 direction)
+    {
+        Direction = direction;
     }
 }
