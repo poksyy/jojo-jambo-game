@@ -12,11 +12,14 @@ public class JohnMovement : MonoBehaviour
     private Animator Animator;
     private float Horizontal;
     private bool Grounded;
+    private int jumpCount;
+    private float LastShoot;
 
     void Start()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
+        jumpCount = 0;
     }
 
     void Update()
@@ -33,20 +36,30 @@ public class JohnMovement : MonoBehaviour
 
         Grounded = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
 
-        if (Input.GetKeyDown(KeyCode.W) && Grounded)
+        if (Grounded)
+        {
+            jumpCount = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
         {
             Jump();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > LastShoot + 0.25f)
         {
             Shoot();
+            LastShoot = Time.time;
         }
     }
 
     private void Jump()
     {
-        Rigidbody2D.AddForce(Vector2.up * JumpForce);
+        if (jumpCount < 1)
+        {
+            Rigidbody2D.AddForce(Vector2.up * JumpForce);
+            jumpCount++;
+        }
     }
 
     private void Shoot()
