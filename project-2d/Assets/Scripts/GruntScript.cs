@@ -6,19 +6,30 @@ public class GruntScript : MonoBehaviour
 {
     public GameObject BulletPrefab;
     public GameObject John;
+    public Animator animator;
 
     private float LastShoot;
     private int Health = 3;
 
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     private void Update()
     {
-        Vector3 direction = John.transform.position - transform.position;
-        if (direction.x >= 0.0f) transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-        else transform.localScale = new Vector3(-1.0f, 0.0f, 1.0f);
+        if (John == null) return;
+
+            Vector3 direction = John.transform.position - transform.position;
+        if (direction.x >= 0.0f)
+            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        else
+            transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+
 
         float distance = Mathf.Abs(John.transform.position.x - transform.position.x);
 
-        if (distance < 1.0f && Time.time > LastShoot + 0.25f)
+        if (distance < 1.0f && Time.time > LastShoot + 0.75f)
         {
             Shoot();
             LastShoot = Time.time;
@@ -33,6 +44,8 @@ public class GruntScript : MonoBehaviour
 
         GameObject bullet = Instantiate(BulletPrefab, transform.position + direction * 0.1f, Quaternion.identity);
         bullet.GetComponent<BulletScript>().SetDirection(direction);
+
+        animator.SetTrigger("Shoot");
     }
 
     public void Hit()
