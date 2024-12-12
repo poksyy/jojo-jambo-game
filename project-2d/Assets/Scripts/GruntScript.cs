@@ -10,22 +10,25 @@ public class GruntScript : MonoBehaviour
 
     private float LastShoot;
     private int Health = 3;
+    private bool isDead = false;
+    private Rigidbody2D rb;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-        if (John == null) return;
+        if (isDead || John == null) return;
 
-            Vector3 direction = John.transform.position - transform.position;
+        Vector3 direction = John.transform.position - transform.position;
+
         if (direction.x >= 0.0f)
             transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         else
             transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
-
 
         float distance = Mathf.Abs(John.transform.position.x - transform.position.x);
 
@@ -50,7 +53,29 @@ public class GruntScript : MonoBehaviour
 
     public void Hit()
     {
-        Health = Health - 1;
-        if (Health == 0) Destroy(gameObject);
+        if (isDead) return;
+
+        Health -= 1;
+
+        if (Health <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            animator.SetTrigger("Hurt");
+        }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        animator.SetTrigger("die");
+
+        GetComponent<Collider2D>().enabled = false;
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
+
+        Destroy(gameObject, 1.0f);
     }
 }

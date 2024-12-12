@@ -16,7 +16,7 @@ public class JohnMovement : MonoBehaviour
     private float LastShoot;
     private int Health = 5;
     private bool isDead = false;
-    private bool isHurt = false;  // Bandera para controlar la animación de daño
+    private bool isHurt = false; 
 
     void Start()
     {
@@ -74,7 +74,7 @@ public class JohnMovement : MonoBehaviour
 
     private void Jump()
     {
-        if (jumpCount < 1)
+        if (jumpCount < 2)
         {
             Rigidbody2D.AddForce(Vector2.up * JumpForce);
             jumpCount++;
@@ -144,7 +144,7 @@ public class JohnMovement : MonoBehaviour
 
     private IEnumerator ResetHurtAnimation()
     {
-        yield return new WaitForSeconds(0.5f); // Tiempo de duración de la animación de daño
+        yield return new WaitForSeconds(0.5f);
         isHurt = false;
     }
 
