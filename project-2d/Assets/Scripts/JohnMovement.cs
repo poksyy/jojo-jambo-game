@@ -16,6 +16,7 @@ public class JohnMovement : MonoBehaviour
     private float LastShoot;
     private int Health = 5;
     private bool isDead = false;
+    private bool isHurt = false;  // Bandera para controlar la animación de daño
 
     void Start()
     {
@@ -26,23 +27,20 @@ public class JohnMovement : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return; // Si el personaje está muerto, no hacer nada
+        if (isDead) return;
 
         Horizontal = Input.GetAxisRaw("Horizontal");
 
-        // Cambiar la dirección del personaje
         if (Horizontal < 0.0f)
             transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
         else if (Horizontal > 0.0f)
             transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-        // Activar animación de correr
         if (Animator != null)
         {
             Animator.SetBool("running", Horizontal != 0.0f);
         }
 
-        // Detectar si el personaje está en el suelo
         Grounded = Physics2D.Raycast(transform.position, Vector2.down, 0.1f);
 
         if (Grounded)
@@ -62,13 +60,11 @@ public class JohnMovement : MonoBehaviour
             }
         }
 
-        // Salto
         if (Input.GetKeyDown(KeyCode.W))
         {
             Jump();
         }
 
-        // Disparo
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > LastShoot + 0.25f)
         {
             Shoot();
@@ -109,8 +105,21 @@ public class JohnMovement : MonoBehaviour
 
     public void Hit()
     {
+        if (isDead || isHurt) return;
+
         Health -= 1;
-        if (Health <= 0 && !isDead)
+
+        if (Health > 0)
+        {
+            isHurt = true;
+            if (Animator != null)
+            {
+                Animator.SetTrigger("hurt");
+            }
+
+            StartCoroutine(ResetHurtAnimation());
+        }
+        else
         {
             Die();
         }
@@ -125,11 +134,18 @@ public class JohnMovement : MonoBehaviour
         }
 
         Rigidbody2D.velocity = Vector2.zero;
-        Rigidbody2D.gravityScale = 0f;
+        Rigidbody2D.isKinematic = true;
 
         GetComponent<Collider2D>().enabled = false;
 
         StartCoroutine(DestroyAfterDeath());
+    }
+
+
+    private IEnumerator ResetHurtAnimation()
+    {
+        yield return new WaitForSeconds(0.5f); // Tiempo de duración de la animación de daño
+        isHurt = false;
     }
 
     private IEnumerator DestroyAfterDeath()
@@ -137,5 +153,4 @@ public class JohnMovement : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         Destroy(gameObject);
     }
-
 }
