@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI; // Si usas Text
 
 public class JohnMovement : MonoBehaviour
 {
     public GameObject BulletPrefab;
     public float Speed;
     public float JumpForce;
+    public Text livesText;
+    public Text coinsText;
 
     private Rigidbody2D Rigidbody2D;
     private Animator Animator;
@@ -15,14 +18,18 @@ public class JohnMovement : MonoBehaviour
     private int jumpCount;
     private float LastShoot;
     private int Health = 5;
+    private int Coins = 0; // Contador de monedas
     private bool isDead = false;
-    private bool isHurt = false; 
+    private bool isHurt = false;
 
     void Start()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
         Animator = GetComponent<Animator>();
         jumpCount = 0;
+
+        UpdateLivesText();
+        UpdateCoinsText(); // Inicializa el contador de monedas
     }
 
     void Update()
@@ -109,6 +116,8 @@ public class JohnMovement : MonoBehaviour
 
         Health -= 1;
 
+        UpdateLivesText();
+
         if (Health > 0)
         {
             isHurt = true;
@@ -122,6 +131,25 @@ public class JohnMovement : MonoBehaviour
         else
         {
             Die();
+        }
+    }
+
+    public void CollectCoin()
+    {
+        Coins += 1;
+        UpdateCoinsText();
+    }
+
+    private void UpdateLivesText()
+    {
+        livesText.text = Health.ToString();
+    }
+
+    private void UpdateCoinsText()
+    {
+        if (coinsText != null)
+        {
+            coinsText.text = Coins.ToString();
         }
     }
 
@@ -140,7 +168,6 @@ public class JohnMovement : MonoBehaviour
 
         StartCoroutine(DestroyAfterDeath());
     }
-
 
     private IEnumerator ResetHurtAnimation()
     {

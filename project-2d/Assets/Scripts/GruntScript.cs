@@ -5,6 +5,7 @@ using UnityEngine;
 public class GruntScript : MonoBehaviour
 {
     public GameObject BulletPrefab;
+    public GameObject CoinPrefab;
     public GameObject John;
     public Animator animator;
 
@@ -48,7 +49,7 @@ public class GruntScript : MonoBehaviour
         GameObject bullet = Instantiate(BulletPrefab, transform.position + direction * 0.1f, Quaternion.identity);
         bullet.GetComponent<BulletScript>().SetDirection(direction);
 
-        animator.SetTrigger("Shoot");
+        animator.SetTrigger("shoot");
     }
 
     public void Hit()
@@ -63,7 +64,7 @@ public class GruntScript : MonoBehaviour
         }
         else
         {
-            animator.SetTrigger("Hurt");
+            animator.SetTrigger("hurt");
         }
     }
 
@@ -76,6 +77,29 @@ public class GruntScript : MonoBehaviour
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
 
+        if (CoinPrefab != null)
+        {
+            StartCoroutine(DropCoinWithDelay(0.7f));
+        }
+
         Destroy(gameObject, 1.0f);
+    }
+
+    private IEnumerator DropCoinWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        Instantiate(CoinPrefab, transform.position, Quaternion.identity);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (John.GetComponent<Rigidbody2D>().velocity.y < 0)
+            {
+                Die() ;
+            }
+        }
     }
 }
