@@ -1,0 +1,12 @@
+Mi personaje se puede mover y saltar entre plataformas.
+Recolecta ítems, en mi caso monedas.
+El personaje no sale de la pantalla porque la cámara sigue al personaje.
+
+En la pantalla se muestran las monedas obtenidas.
+
+Hace doble salto.
+
+Saltando encima del enemigo también lo inhabilita, en mi caso lo mata.
+Los enemigos lanzan objetos en mi caso los enemigos atacan con balas.
+Hay teletransportaciones gracias a los portales.
+Se pierden vidas y se muestran por pantalla hasta que el personaje muere.

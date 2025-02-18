@@ -29,7 +29,7 @@ public class JohnMovement : MonoBehaviour
         jumpCount = 0;
 
         UpdateLivesText();
-        UpdateCoinsText(); // Inicializa el contador de monedas
+        UpdateCoinsText();
     }
 
     void Update()
