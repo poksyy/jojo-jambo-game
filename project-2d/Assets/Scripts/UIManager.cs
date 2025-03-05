@@ -1,75 +1,32 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-public class UIManager : MonoBehaviour
+public class MainMenu : MonoBehaviour
 {
-    public static UIManager Instance { get; private set; }
+    public Button startButton;
+    public Button loadButton;
+    public Button quitButton;
 
-    public Button level1Button;
-    public Button level2Button;
-
-    private void Awake()
+    void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        startButton.onClick.AddListener(StartGame);
+        loadButton.onClick.AddListener(LoadGame);
+        quitButton.onClick.AddListener(QuitGame);
     }
 
-    private void Start()
-    {
-        if (PlayerPrefs.GetInt("Level1Completed", 0) == 1)
-        {
-            UnlockLevel2();
-        }
-        else
-        {
-            LockLevel2();
-        }
-    }
-
-    public void LoadLevelSelect()
+    void StartGame()
     {
         SceneManager.LoadScene("LevelSelect");
     }
 
-    public void StartGame()
+    void LoadGame()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("SlotSelect");
     }
 
-    public void LoadLevel2()
+    void QuitGame()
     {
-        SceneManager.LoadScene("Level2");
-    }
-
-    public void CompleteLevel1()
-    {
-        PlayerPrefs.SetInt("Level1Completed", 1);
-        PlayerPrefs.Save();
-
-        UnlockLevel2();
-    }
-
-    private void LockLevel2()
-    {
-        if (level2Button != null)
-        {
-            level2Button.interactable = false;
-        }
-    }
-
-    private void UnlockLevel2()
-    {
-        if (level2Button != null)
-        {
-            level2Button.interactable = true;
-        }
+        Application.Quit();
     }
 }

@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; // Si usas Text
+using UnityEngine.UI;
 
 public class JohnMovement : MonoBehaviour
 {
@@ -17,10 +16,30 @@ public class JohnMovement : MonoBehaviour
     private bool Grounded;
     private int jumpCount;
     private float LastShoot;
-    private int Health = 5;
-    private int Coins = 0; // Contador de monedas
+    private int health = 5;
+    private int coins = 0;
     private bool isDead = false;
     private bool isHurt = false;
+
+    public int Coins
+    {
+        get { return coins; }
+        set
+        {
+            coins = value;
+            UpdateCoinsText();
+        }
+    }
+
+    public int Health
+    {
+        get { return health; }
+        set
+        {
+            health = value;
+            UpdateLivesText();
+        }
+    }
 
     void Start()
     {
@@ -114,9 +133,7 @@ public class JohnMovement : MonoBehaviour
     {
         if (isDead || isHurt) return;
 
-        Health -= 1;
-
-        UpdateLivesText();
+        Health -= 1; // Usamos la propiedad Health para actualizar la vida
 
         if (Health > 0)
         {
@@ -136,8 +153,7 @@ public class JohnMovement : MonoBehaviour
 
     public void CollectCoin()
     {
-        Coins += 1;
-        UpdateCoinsText();
+        Coins += 1; // Usamos la propiedad Coins para actualizar las monedas
     }
 
     private void UpdateLivesText()
