@@ -14,7 +14,7 @@ public class PlayerStats : MonoBehaviour
 
         if (johnMovement == null)
         {
-            Debug.LogError("JohnMovement no encontrado en el objeto con PlayerStats.");
+            Debug.LogError("JohnMovement is not assigned.");
         }
 
         LoadGameData();
@@ -24,7 +24,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (johnMovement == null)
         {
-            Debug.LogError("JohnMovement no está asignado en PlayerStats.");
+            Debug.LogError("JohnMovement is not assign to PlayerStats.");
             return null;
         }
 

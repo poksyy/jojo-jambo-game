@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class JohnMovement : MonoBehaviour
 {
@@ -20,6 +22,7 @@ public class JohnMovement : MonoBehaviour
     private int coins = 0;
     private bool isDead = false;
     private bool isHurt = false;
+    public GameObject gameOverText;
 
     public int Coins
     {
@@ -49,6 +52,7 @@ public class JohnMovement : MonoBehaviour
 
         UpdateLivesText();
         UpdateCoinsText();
+
     }
 
     void Update()
@@ -133,7 +137,7 @@ public class JohnMovement : MonoBehaviour
     {
         if (isDead || isHurt) return;
 
-        Health -= 1; // Usamos la propiedad Health para actualizar la vida
+        Health -= 1;
 
         if (Health > 0)
         {
@@ -153,7 +157,7 @@ public class JohnMovement : MonoBehaviour
 
     public void CollectCoin()
     {
-        Coins += 1; // Usamos la propiedad Coins para actualizar las monedas
+        Coins += 1;
     }
 
     private void UpdateLivesText()
@@ -182,7 +186,16 @@ public class JohnMovement : MonoBehaviour
 
         GetComponent<Collider2D>().enabled = false;
 
+        if (gameOverText != null)
+            gameOverText.SetActive(true);
+
         StartCoroutine(DestroyAfterDeath());
+    }
+
+    private IEnumerator DestroyAfterDeath()
+    {
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("MainMenu");
     }
 
     private IEnumerator ResetHurtAnimation()
@@ -191,9 +204,4 @@ public class JohnMovement : MonoBehaviour
         isHurt = false;
     }
 
-    private IEnumerator DestroyAfterDeath()
-    {
-        yield return new WaitForSeconds(1.0f);
-        Destroy(gameObject);
-    }
 }
